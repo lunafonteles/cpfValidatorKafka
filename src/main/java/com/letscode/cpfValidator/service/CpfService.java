@@ -1,8 +1,12 @@
 package com.letscode.cpfValidator.service;
 
+
+import com.letscode.cpfValidator.model.CpfRegister;
 import com.letscode.cpfValidator.request.CpfRequest;
-import com.letscode.cpfValidator.response.CpfResponse;
+import java.util.List;
 
 public interface CpfService {
-    public CpfResponse execute(CpfRequest cpfRequest);
+    boolean cpfPrize ();
+    void addWinner(CpfRequest cpfRequest);
+    List<CpfRegister> getAll();
 }

@@ -6,8 +6,9 @@ import com.letscode.cpfValidator.request.CpfRequest;
 import com.letscode.cpfValidator.response.CpfResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -15,24 +16,26 @@ public class CpfServiceImpl implements CpfService {
 
     private final CpfRepository cpfRepository;
 
-    @Override
-    public CpfResponse execute(CpfRequest cpfRequest) {
-        Optional<CpfRegister> existentRegister = cpfRepository.findFirstByCpf(cpfRequest.getCpf());
-        String uuid = UUID.randomUUID().toString();
-        if(existentRegister.isEmpty()) {
-            CpfRegister registroCPF = new CpfRegister();
-            registroCPF.setCpf(cpfRequest.getCpf());
-            registroCPF.setNome(cpfRequest.getName());
-            registroCPF.setUuid(uuid);
-            cpfRepository.save(registroCPF);
-        }else{
-            uuid = existentRegister.get().getUuid();
+    public boolean cpfPrize() {
+        Random aleatorio = new Random();
+        int valor = aleatorio.nextInt(6) + 1;
+        System.out.println("Número gerado: " + valor);
+        if (valor %2 == 0) {
+            return true;
         }
+        return false;
+    }
 
-        CpfResponse cpfResponse = CpfResponse.fromRequest(cpfRequest);
-        cpfResponse.setId(uuid);
+    public void addWinner(CpfRequest cpfRequest) {
+        CpfRegister cpfRegister = new CpfRegister();
+        cpfRegister.setCpf(cpfRequest.getCpf());
+        cpfRegister.setNome(cpfRequest.getName());
 
+        cpfRepository.save(cpfRegister);
+    }
 
-        return cpfResponse;
+    @Override
+    public List<CpfRegister> getAll() {
+        return cpfRepository.findAll();
     }
 }

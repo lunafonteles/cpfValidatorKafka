@@ -1,22 +1,32 @@
 package com.letscode.cpfValidator.controller;
 
+import com.letscode.cpfValidator.model.CpfRegister;
 import com.letscode.cpfValidator.request.CpfRequest;
 import com.letscode.cpfValidator.response.CpfResponse;
-import com.letscode.cpfValidator.service.CpfServiceImpl;
+import com.letscode.cpfValidator.service.CpfService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("cpf")
 @RequiredArgsConstructor
 public class CpfController {
-    private final CpfServiceImpl cpfServiceImpl;
+    private final CpfService cpfService;
 
-    @PostMapping("add")
+    @PostMapping("validator")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public CpfResponse addCpf(@RequestBody CpfRequest cpfRequest){
-        return cpfServiceImpl.execute(cpfRequest);
+    public boolean cpfPrizeValidator(){
+        return cpfService.cpfPrize();
+    }
+
+    @GetMapping("")
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<CpfRegister> getCpfWinners() {
+
+        return cpfService.getAll();
     }
 }
 
